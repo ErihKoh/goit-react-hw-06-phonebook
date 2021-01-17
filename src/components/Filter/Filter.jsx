@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { changeFilter } from '../../redux/actions';
 import s from './Filter.module.css';
 
 function Filter({ value, onChange }) {
@@ -23,4 +25,12 @@ Filter.protoTypes = {
   onChange: PropTypes.func,
 };
 
-export default Filter;
+const mapStateToProps = state => ({
+  value: state.filter,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onChange: e => dispatch(changeFilter(e.target.value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);
