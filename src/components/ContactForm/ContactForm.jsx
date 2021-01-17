@@ -8,7 +8,7 @@ import { defaults } from '@pnotify/core';
 import { addContacts } from '../../redux/actions';
 import s from './ContactForm.module.css';
 
-defaults.delay = 2000;
+defaults.delay = 3000;
 
 function ContactForm({ onSubmit, contacts }) {
   const [name, setName] = useState('');
@@ -94,32 +94,3 @@ ContactForm.propTypes = {
   name: PropTypes.string,
   number: PropTypes.number,
 };
-
-// const handleSubmit = data => {
-//   if (data.name === '') {
-//     return error({
-//       title: 'Error',
-//       text: 'Please eneter name!',
-//     });
-//   }
-//   if (data.number === '') {
-//     return error({
-//       title: 'Error',
-//       text: 'Please eneter number!',
-//     });
-//   }
-
-//   const findContact = contacts.find(({ name }) => data.name === name);
-
-//   if (!findContact) {
-//     setContacts([data, ...contacts]);
-//     return;
-//   }
-
-//   if (findContact.name === data.name) {
-//     notice({
-//       title: 'Notice',
-//       text: `${data.name} is already in contacts.`,
-//     });
-//   }
-// };
