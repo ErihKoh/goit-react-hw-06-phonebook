@@ -1,12 +1,18 @@
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import s from './ContactList.module.css';
 import ContactEl from '../ContactEl';
 import IconBatton from '../IconButton';
 import { deleteContacts } from '../../redux/actions';
+import { getVisibleContacts } from '../../redux/selector';
 import { ReactComponent as DelIcon } from '../../icons/delete.svg';
 
-function ContactList({ contacts, onDeleteContact }) {
+export default function ContactList() {
+  const contacts = useSelector(getVisibleContacts);
+  const dispatch = useDispatch();
+
+  const onDeleteContact = id => dispatch(deleteContacts(id));
+
   return (
     <ul className={s.list}>
       {contacts &&
@@ -24,23 +30,6 @@ function ContactList({ contacts, onDeleteContact }) {
     </ul>
   );
 }
-
-const getVisibleContacts = (contacts, filter) => {
-  const normalizeFilter = filter.toLowerCase();
-  return contacts.filter(contact =>
-    contact.data.name.toLowerCase().includes(normalizeFilter),
-  );
-};
-
-const mapStateToProps = ({ items, filter }) => ({
-  contacts: getVisibleContacts(items, filter),
-});
-
-const mapDispatchToProps = dispatch => ({
-  onDeleteContact: id => dispatch(deleteContacts(id)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
 
 ContactList.protoTypes = {
   contacts: PropTypes.array,

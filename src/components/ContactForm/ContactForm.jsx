@@ -1,18 +1,22 @@
 import { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import '@pnotify/core/dist/BrightTheme.css';
 import '@pnotify/core/dist/PNotify.css';
 import { error, notice } from '@pnotify/core';
 import { defaults } from '@pnotify/core';
 import { addContacts } from '../../redux/actions';
+import { getContacts } from '../../redux/selector';
 import s from './ContactForm.module.css';
 
 defaults.delay = 3000;
 
-function ContactForm({ onSubmit, contacts }) {
+export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -31,14 +35,15 @@ function ContactForm({ onSubmit, contacts }) {
     }
 
     const findContact = contacts?.find(contact => contact.data.name === name);
+    console.log(contacts);
 
     if (!findContact) {
-      onSubmit({ name, number });
+      dispatch(addContacts({ name, number }));
       reset();
       return;
     }
 
-    if (findContact.data.name === name) {
+    if (findContact?.data.name === name) {
       reset();
       return notice({
         title: 'Notice',
@@ -79,16 +84,6 @@ function ContactForm({ onSubmit, contacts }) {
     </form>
   );
 }
-
-const mapStateToProps = state => ({
-  contacts: state.items,
-});
-
-const mapDispatchToProps = dispatch => ({
-  onSubmit: data => dispatch(addContacts(data)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
 
 ContactForm.propTypes = {
   name: PropTypes.string,

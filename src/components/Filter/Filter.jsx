@@ -1,9 +1,14 @@
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { changeFilter } from '../../redux/actions';
+import { getFilter } from '../../redux/selector';
 import s from './Filter.module.css';
 
-function Filter({ value, onChange }) {
+export default function Filter() {
+  const value = useSelector(getFilter);
+
+  const dispatch = useDispatch();
+
   return (
     <div className={s.block}>
       <label className={s.label} htmlFor="filter">
@@ -14,7 +19,7 @@ function Filter({ value, onChange }) {
         id="filter"
         type="text"
         value={value}
-        onChange={onChange}
+        onChange={e => dispatch(changeFilter(e.target.value))}
       />
     </div>
   );
@@ -24,13 +29,3 @@ Filter.protoTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
 };
-
-const mapStateToProps = state => ({
-  value: state.filter,
-});
-
-const mapDispatchToProps = dispatch => ({
-  onChange: e => dispatch(changeFilter(e.target.value)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
